@@ -191,7 +191,7 @@ def build_truck_route(
         raise RouteRequestError(
             detail or "OpenRouteService could not calculate the requested truck route."
         )
-
+    print("ROUTE SERVICE VERSION 2")
     payload = _parse_json(response)
    
     print("ORS STATUS:", response.status_code)
