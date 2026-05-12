@@ -49,9 +49,11 @@ INSTALLED_APPS = [
     "trips",
     "hos",
     "logs",
+    
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -133,3 +135,5 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.JSONParser",
     ],
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
