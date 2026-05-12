@@ -7,6 +7,6 @@ const api = axios.create({
   },
 });
 
-export const createTripPlan = (payload) => api.post("/trips/create/", payload);
+export const createTripPlan = (payload) => api.post("/api/trips/create/", payload);
 
 export default api;
