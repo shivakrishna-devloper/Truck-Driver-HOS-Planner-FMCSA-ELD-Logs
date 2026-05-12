@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const PRODUCTION_API_ORIGIN =
-  "https://truck-driver-hos-planner-fmcsa-eld-logs.onrender.com";
+  "https://truck-driver-hos-backend.onrender.com";
 
 function resolveApiBaseUrl() {
   const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
