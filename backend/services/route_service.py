@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import requests
@@ -11,6 +12,9 @@ ORS_GEOCODE_URL = "https://api.openrouteservice.org/geocode/search"
 ORS_DIRECTIONS_URL = "https://api.openrouteservice.org/v2/directions/driving-hgv"
 REQUEST_TIMEOUT_SECONDS = 20
 MILES_PER_METER = 0.000621371
+ENV_FILE_PATH = Path(__file__).resolve().parent.parent / ".env"
+PROXY_ENV_VARS = ("ALL_PROXY", "HTTPS_PROXY", "HTTP_PROXY")
+DISABLED_PROXY_TARGETS = ("127.0.0.1:9", "localhost:9", "[::1]:9")
 
 
 class RouteServiceError(Exception):
@@ -36,14 +40,47 @@ class PlannedStop:
     query: str
 
 
+def _read_env_value(name: str) -> str | None:
+    """Fallback reader for backend/.env when python-dotenv is unavailable."""
+
+    try:
+        lines = ENV_FILE_PATH.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+        if key.strip() != name:
+            continue
+
+        cleaned_value = value.strip().strip('"').strip("'")
+        return cleaned_value or None
+
+    return None
+
+
 def _get_api_key() -> str:
-    api_key = os.getenv("ORS_API_KEY")
+    api_key = os.getenv("ORS_API_KEY") or _read_env_value("ORS_API_KEY")
     if not api_key:
         raise RouteConfigurationError(
             "OpenRouteService is not configured. Add ORS_API_KEY to backend/.env "
             "before generating routes."
         )
+    os.environ.setdefault("ORS_API_KEY", api_key)
     return api_key
+
+
+def _should_bypass_env_proxies() -> bool:
+    for env_name in PROXY_ENV_VARS:
+        proxy_value = os.getenv(env_name, "").strip().lower()
+        if any(target in proxy_value for target in DISABLED_PROXY_TARGETS):
+            return True
+
+    return False
 
 
 def _parse_json(response: requests.Response) -> dict[str, Any]:
@@ -151,6 +188,10 @@ def build_truck_route(
     )
 
     with requests.Session() as session:
+        if _should_bypass_env_proxies():
+            # Ignore known dead-end proxy values that block ORS in local dev shells.
+            session.trust_env = False
+
         session.headers.update({"User-Agent": "hos-planner/1.0"})
         waypoints = [
             _geocode_location(session=session, api_key=api_key, stop=stop)
@@ -191,12 +232,9 @@ def build_truck_route(
         raise RouteRequestError(
             detail or "OpenRouteService could not calculate the requested truck route."
         )
-    print("ROUTE SERVICE VERSION 2")
+
     payload = _parse_json(response)
-   
-    print("ORS STATUS:", response.status_code)
-    print("ORS PAYLOAD:", payload)
-   
+
     routes = payload.get("routes") or []
     if not routes:
         raise RouteRequestError(

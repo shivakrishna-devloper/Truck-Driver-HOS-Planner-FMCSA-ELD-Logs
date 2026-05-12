@@ -49,10 +49,16 @@ function HomePage() {
         setPlannerData(data);
       });
     } catch (requestError) {
+      const responseData = requestError.response?.data;
       const detail =
-        requestError.response?.data?.detail ||
-        requestError.response?.data?.message ||
-        "The trip planner could not build a route. Check the stops and backend OpenRouteService configuration.";
+        (typeof responseData === "object" &&
+          (responseData?.detail || responseData?.message)) ||
+        (typeof responseData === "string" && !responseData.trim().startsWith("<")
+          ? responseData
+          : "") ||
+        (requestError.response
+          ? "The trip planner request failed. Check the stops, backend URL, and OpenRouteService configuration."
+          : "Could not reach the trip planner backend. Confirm the backend is running and VITE_API_BASE_URL points to it.");
       setError(detail);
     } finally {
       setLoading(false);
