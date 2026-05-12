@@ -7,8 +7,8 @@ from typing import Any
 import requests
 
 
-ORS_GEOCODE_URL = "https://api.openrouteservice.org/geocode/search"
-ORS_DIRECTIONS_URL = "https://api.openrouteservice.org/v2/directions/driving-hgv"
+ORS_GEOCODE_URL = "https://api.heigit.org/geocode/search"
+ORS_DIRECTIONS_URL = "https://api.heigit.org/v2/directions/driving-hgv"
 REQUEST_TIMEOUT_SECONDS = 20
 MILES_PER_METER = 0.000621371
 
