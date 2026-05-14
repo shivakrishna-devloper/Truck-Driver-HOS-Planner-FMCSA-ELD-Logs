@@ -9,7 +9,7 @@ import requests
 
 
 ORS_GEOCODE_URL = "https://api.openrouteservice.org/geocode/search"
-ORS_DIRECTIONS_URL = "https://api.openrouteservice.org/v2/directions/driving-hgv"
+ORS_DIRECTIONS_URL = "https://api.openrouteservice.org/v2/directions/driving-car"
 REQUEST_TIMEOUT_SECONDS = 20
 MILES_PER_METER = 0.000621371
 ENV_FILE_PATH = Path(__file__).resolve().parent.parent / ".env"
