@@ -38,7 +38,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "truck-driver-hos-planner-fmcsa-eld-logs.onrender.com",
 ]
-CSRF_TRUSTED_ORIGINS = _env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
+
 
 
 INSTALLED_APPS = [
@@ -58,8 +58,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     
-    "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -147,3 +147,6 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    "https://truck-driver-hos-planner-fmcsa-eld.vercel.app",
+]
