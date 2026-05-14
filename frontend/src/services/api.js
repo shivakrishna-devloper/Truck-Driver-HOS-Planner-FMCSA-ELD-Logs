@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://truck-driver-hos-backend.onrender.com",
+  baseURL: import.meta.env.DEV
+    ? "http://127.0.0.1:8000"
+    : "https://truck-driver-hos-backend.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },

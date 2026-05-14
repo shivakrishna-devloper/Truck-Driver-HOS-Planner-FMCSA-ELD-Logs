@@ -17,6 +17,7 @@ from .serializers import TripCreateSerializer, TripSerializer
 
 class TripCreateAPIView(APIView):
     def post(self, request):
+        print("TRIP API HIT")
         serializer = TripCreateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
