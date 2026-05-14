@@ -33,11 +33,8 @@ SECRET_KEY = os.getenv(
     "django-insecure-demo-secret-change-me",
 )
 DEBUG = _env_bool("DJANGO_DEBUG", True)
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "truck-driver-hos-planner-fmcsa-eld-logs.onrender.com",
-]
+ALLOWED_HOSTS = ["*"]
+    
 
 
 
@@ -57,7 +54,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    
+
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -147,6 +144,7 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = [
-    "https://truck-driver-hos-planner-fmcsa-eld.vercel.app",
-]
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    ""
+).split(",")
