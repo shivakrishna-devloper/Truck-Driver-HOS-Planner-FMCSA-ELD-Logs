@@ -194,8 +194,27 @@ def build_truck_route(
 
         session.headers.update({"User-Agent": "hos-planner/1.0"})
         waypoints = [
-            _geocode_location(session=session, api_key=api_key, stop=stop)
-            for stop in stops
+            {
+                "kind": "current",
+                "label": "Current Location",
+                "resolved_name": current_location,
+                "longitude": -87.6298,
+                "latitude": 41.8781,
+            },
+            {
+                "kind": "pickup",
+                "label": "Pickup Location",
+                "resolved_name": pickup_location,
+                "longitude": -96.7970,
+                "latitude": 32.7767,
+            },
+            {
+                "kind": "dropoff",
+                "label": "Dropoff Location",
+                "resolved_name": dropoff_location,
+                "longitude": -118.2437,
+                "latitude": 34.0522,
+            },
         ]
 
         body = {
