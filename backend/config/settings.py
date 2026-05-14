@@ -144,7 +144,6 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    "DJANGO_CSRF_TRUSTED_ORIGINS",
-    ""
-).split(",")
+CSRF_TRUSTED_ORIGINS = [
+    "https://truck-driver-hos-planner-epqbpm8b5.vercel.app",
+]
